@@ -1,13 +1,31 @@
 <?php
 
 namespace App\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-
+/**
+ * @ORM\Entity(repositoryClass=JobRepository::class)\
+ * @ORM\Table(name="app_jobs")
+ */
 class Job{
 
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $name;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     
 
@@ -47,6 +65,26 @@ class Job{
     public function setName(?string $name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of createdAt
+     */ 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set the value of createdAt
+     *
+     * @return  self
+     */ 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

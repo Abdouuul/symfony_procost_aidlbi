@@ -2,18 +2,52 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass=WorkerRepository::class)\
+ * @ORM\Table(name="app_workers")
+ */
 class Worker{
 
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $name;
 
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $email;
 
+    /**
+     * To determin
+     */
     private $job;
 
+    /**
+     * To determin
+     */
+    private $projects;
+
+    /**
+     * @ORM\Column(type="float", length=255)
+     */
     private $salary;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $createdAt;
 
 
@@ -133,6 +167,24 @@ class Worker{
     public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */ 
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addWorker($this);
+        }
 
         return $this;
     }

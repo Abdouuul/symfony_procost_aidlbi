@@ -2,6 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass=ProjectRepository::class)\
+ * @ORM\Table(name="app_projects")
+ */
 class Project
 {
     /**
@@ -20,6 +28,11 @@ class Project
      * @ORM\Column(type="string", length=255)
      */
     private $price;
+
+    /**
+     * TBD
+     */
+    private $workers;
 
     /**
      * @ORM\Column(type="datetime")
@@ -127,6 +140,24 @@ class Project
     public function setDeliveryDate(\DateTimeInterface $deliveryDate): self
     {
         $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Worker[]
+     */ 
+    public function getWorkers(): Collection
+    {
+        return $this->workers;
+    }
+
+    public function addWorker(Worker $worker): self
+    {
+        if (!$this->workers->contains($worker)) {
+            $this->workers[] = $worker;
+            $worker->addProject($this);
+        }
 
         return $this;
     }
