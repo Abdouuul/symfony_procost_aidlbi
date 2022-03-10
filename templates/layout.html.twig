@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-
 {% block body %}
     <!-- Navbar -->
-    <header class="app-header"><a class="app-header__logo" href="#">Procost</a>
+    <header class="app-header"><a class="app-header__logo" href="{{ path('main_dashboard') }}">Procost</a>
         <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
         <!-- Navbar Right Menu-->
         <ul class="app-nav">
@@ -51,12 +50,14 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="app-content">
+    <main class="app-content">
         {% block main %}
         {% endblock %}
         <footer class="main-footer">
             &copy; 2019 - PROCOST
         </footer>
     </div>
+
+    <script src="{{ asset('js/main.js') }}"></script>
 
 {% endblock %}
