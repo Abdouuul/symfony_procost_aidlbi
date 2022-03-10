@@ -6,10 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)\
- * @ORM\Table(name="app_projects")
- */
+
 class Project
 {
     /**
@@ -29,10 +26,10 @@ class Project
      */
     private $price;
 
-    /**
-     * TBD
-     */
-    private $workers;
+    // /**
+    //  * TBD
+    //  */
+    // private $workers;
 
     /**
      * @ORM\Column(type="datetime")
@@ -144,21 +141,21 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection|Worker[]
-     */ 
-    public function getWorkers(): Collection
-    {
-        return $this->workers;
-    }
+    // /**
+    //  * @return Collection|Worker[]
+    //  */ 
+    // public function getWorkers(): Collection
+    // {
+    //     return $this->workers;
+    // }
 
-    public function addWorker(Worker $worker): self
-    {
-        if (!$this->workers->contains($worker)) {
-            $this->workers[] = $worker;
-            $worker->addProject($this);
-        }
+    // public function addWorker(Worker $worker): self
+    // {
+    //     if (!$this->workers->contains($worker)) {
+    //         $this->workers[] = $worker;
+    //         $worker->addProject($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

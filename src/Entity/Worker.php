@@ -21,34 +21,44 @@ class Worker{
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le nom complet.")
      */
     private $name;
 
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner l'email.")
+     * @Assert\Email(message="L'email {{ value }} n'est pas valide.")
      */
     private $email;
 
-    /**
-     * To determin
-     */
-    private $job;
+    // /**
+    //  * to determine
+    //  */
+    // private $job;
 
-    /**
-     * To determin
-     */
-    private $projects;
+    // /**
+    //  * To determine
+    //  */
+    // private $projects;
 
     /**
      * @ORM\Column(type="float", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le coût journalier.")
      */
-    private $salary;
+    private $dailycost;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
      */
     private $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
 
     /**
@@ -111,45 +121,25 @@ class Worker{
         return $this;
     }
 
-    /**
-     * Get the value of job
-     */ 
-    public function getJob() : ?Job
-    {
-        return $this->job;
-    }
+    // /**
+    //  * Get the value of job
+    //  */ 
+    // public function getJob() : ?Job
+    // {
+    //     return $this->job;
+    // }
 
-    /**
-     * Set the value of job
-     *
-     * @return  self
-     */ 
-    public function setJob(?Job $job)
-    {
-        $this->job = $job;
+    // /**
+    //  * Set the value of job
+    //  *
+    //  * @return  self
+    //  */ 
+    // public function setJob(?Job $job)
+    // {
+    //     $this->job = $job;
 
-        return $this;
-    }
-
-    /**
-     * Get the value of salary
-     */ 
-    public function getSalary(): ?float
-    {
-        return $this->salary;
-    }
-
-    /**
-     * Set the value of salary
-     *
-     * @return  self
-     */ 
-    public function setSalary(?float $salary)
-    {
-        $this->salary = $salary;
-
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Get the value of createdAt
@@ -171,20 +161,40 @@ class Worker{
         return $this;
     }
 
+    // /**
+    //  * @return Collection|Project[]
+    //  */ 
+    // public function getProjects(): Collection
+    // {
+    //     return $this->projects;
+    // }
+
+    // public function addProject(Project $project): self
+    // {
+    //     if (!$this->projects->contains($project)) {
+    //         $this->projects[] = $project;
+    //         $project->addWorker($this);
+    //     }
+
+    //     return $this;
+    // }
+
     /**
-     * @return Collection|Project[]
+     * Get the value of dailycost
      */ 
-    public function getProjects(): Collection
+    public function getDailycost(): ?float
     {
-        return $this->projects;
+        return $this->dailycost;
     }
 
-    public function addProject(Project $project): self
+    /**
+     * Set the value of dailycost
+     *
+     * @return  self
+     */ 
+    public function setDailycost(?float $dailycost)
     {
-        if (!$this->projects->contains($project)) {
-            $this->projects[] = $project;
-            $project->addWorker($this);
-        }
+        $this->dailycost = $dailycost;
 
         return $this;
     }
