@@ -5,9 +5,10 @@ namespace App\Form;
 use App\Entity\WorkTime;
 use App\Repository\JobRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class WorkTimeType extends AbstractType
 {
@@ -18,8 +19,13 @@ class WorkTimeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void 
     {
         $builder
-            ->add('firstName', TextType::class, [
-                'label' => 'Prénom'
+            ->add('project', ChoiceType::class, [
+                'label' => 'Projet concenré',
+                'choices' => $this->jobRepository->findAll(),
+                'choice_label' => 'name',
+            ])
+            ->add('days', NumberType::class, [
+                'label' => 'Nombre de jours'
             ])
         ;
     } 

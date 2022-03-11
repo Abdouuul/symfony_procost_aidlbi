@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Worker;
+use App\Entity\WorkTime;
 use App\Form\WorkerType;
 use App\Repository\WorkerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,13 +36,30 @@ class WorkerController extends AbstractController
         ]);
     }
 
-    #[Route('/workers/edit/{id}', name: 'worker_show')]
-    public function showWorker(int $id): Response
+    #[Route('/workers/view/{id}', name: 'worker_show')]
+    public function showWorker(int $id, Request $request): Response
     {
+        $worker = $this->workerRepository->findOneWithDetails($id);
+
+        $WorkTime = new WorkTime();
+        $form = $this->createForm(WorkTime::class, $WorkTime);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $WorkTime->setWorker($worker);
+
+            $cost = (float) $worker->getDailycost() * $WorkTime->getDays();
+            $WorkTime->setCost($cost);
+
+            $this->em->persist($WorkTime);
+            $this->em->flush();
+        }
+
+
         return $this->render('Workers/show.html.twig', [
             'controller_name' => 'WorkerController',
             'current_route' => 'worker_show',
-            'worker_id' => $id
+            'worker' => $worker
         ]);
     }
 

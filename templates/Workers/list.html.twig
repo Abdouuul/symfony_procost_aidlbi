@@ -39,7 +39,7 @@
                         <td>{{ worker.dailycost ~ '€'}} </td>
                         <td>{{ worker.employedAt|date("F, Y") }}</td>
                         <td>
-                            <a href="detail.html" class="btn btn-primary btn-sm">
+                            <a href="{{ path('worker_show', { 'id': worker.id }) }}" class="btn btn-primary btn-sm">
                                 <i class="fa fa-eye mr-0"></i>
                             </a>
                             <a href="form.html" class="btn btn-info btn-sm">

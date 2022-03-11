@@ -1,13 +1,14 @@
 <?php
 
-
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
- * @ORM\Entity(repositoryClass=WorkerRepository::class)\
+ * @ORM\Entity(repositoryClass=WorkTimeRepository::class)\
  * @ORM\Table(name="app_worktimes")
  */
-
 class WorkTime
 {
     /**
@@ -20,6 +21,7 @@ class WorkTime
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="worktimes")
      * @ORM\JoinColumn(nullable=false, name="app_worktime_project_id")
+     * @Assert\NotBlank(message="Veuillez choisir un projet.")
      */
     private $project;
 
@@ -30,12 +32,13 @@ class WorkTime
     private $worker;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="float", length=255)
      */
     private $cost;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez renseigner le nombre de jours.")
      */
     private $days;
 
@@ -102,7 +105,7 @@ class WorkTime
     /**
      * Get the value of cost
      */ 
-    public function getCost(): ?string
+    public function getCost(): ?float
     {
         return $this->cost;
     }
@@ -112,7 +115,7 @@ class WorkTime
      *
      * @return  self
      */ 
-    public function setCost(string $cost)
+    public function setCost(float $cost)
     {
         $this->cost = $cost;
 

@@ -6,12 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\WorkTime;
 
 /**
  * @ORM\Entity(repositoryClass=WorkerRepository::class)\
  * @ORM\Table(name="app_worker")
  */
-class Worker{
+class Worker
+{
 
     /**
      * @ORM\Id

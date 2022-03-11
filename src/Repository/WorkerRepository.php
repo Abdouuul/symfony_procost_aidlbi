@@ -29,6 +29,17 @@ class WorkerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    
+    public function findOneWithDetails(int $id): Worker
+    {
+        $qb = $this->createQueryBuilder('w')
+                    ->andWhere('w.id = :id')
+                    ->setParameter('id', $id);
+        $this->addJoinJob($qb);
+        return $qb
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
 
     public function addJoinJob(QueryBuilder $qb)
