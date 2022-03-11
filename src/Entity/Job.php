@@ -1,10 +1,16 @@
 <?php
 
 namespace App\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
+/**
+ * @ORM\Entity(repositoryClass=JobRepository::class)
+ * @ORM\Table(name="app_job")
+ */
 class Job{
 
     /**
@@ -16,15 +22,25 @@ class Job{
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le nom du métier.")
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Worker::class, mappedBy="job", orphanRemoval=true)
+     */
+    private $workers;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
-    
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->workers = new ArrayCollection();
+    }
 
     /**
      * Get the value of id
@@ -83,6 +99,46 @@ class Job{
     {
         $this->createdAt = $createdAt;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Worker[]
+     */ 
+    public function getWorkers(): Collection
+    {
+        return $this->workers;
+    }
+
+    /**
+     * Set the value of workers
+     *
+     * @return  self
+     */ 
+    public function addWorker(Worker $worker)
+    {
+        if (!$this->workers->contains($worker)) {
+            $this->workers[] = $worker;
+            $worker->setJob($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove workers
+     *
+     * @return  self
+     */
+    public function removeWorker(Worker $worker)
+    {
+        if ($this->workers->contains($worker)) {
+            $this->workers->removeElement($worker);
+            // set the owning side to null (unless already changed)
+            if ($worker->getJob() === $this) {
+                $worker->setJob(null);
+            }
+        }
         return $this;
     }
 }

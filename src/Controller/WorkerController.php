@@ -20,14 +20,18 @@ class WorkerController extends AbstractController
         )
     {
         $this->em = $em;
+        $this->workerRepository = $workerRepository;
     }
 
     #[Route('/workers', name: 'list_workers')]
     public function listWorkers(): Response
     {
+        $workers = $this->workerRepository->findAllWithDetails();
+
         return $this->render('Workers/list.html.twig', [
             'controller_name' => 'WorkerController',
-            'current_route' => 'list_workers'
+            'current_route' => 'list_workers',
+            'workers' => $workers
         ]);
     }
 
@@ -55,7 +59,7 @@ class WorkerController extends AbstractController
             return $this->redirectToRoute('list_workers');
         }
 
-        return $this->render('Workers/new.html.twig', [
+        return $this->render('Workers/form.html.twig', [
             'controller_name' => 'WorkerController',
             'current_route' => 'worker_new',
             'form' => $form->createView()

@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
+/**
+ * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ * @ORM\Table(name="app_project")
+ */
 class Project
 {
     /**
@@ -18,18 +23,26 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le nom du projet.")
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner la description du projet.")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le prix du projet.")
      */
     private $price;
 
-    // /**
-    //  * TBD
-    //  */
-    // private $workers;
+    /**
+     * @ORM\OneToMany(targetEntity=WorkTime::class, mappedBy="project", orphanRemoval=true)
+     */
+    private $worktimes;
 
     /**
      * @ORM\Column(type="datetime")
@@ -37,9 +50,16 @@ class Project
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $deliveryDate;
+
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->worktimes = new ArrayCollection();
+    }
 
     /**
      * Get the value of id
@@ -141,21 +161,46 @@ class Project
         return $this;
     }
 
-    // /**
-    //  * @return Collection|Worker[]
-    //  */ 
-    // public function getWorkers(): Collection
-    // {
-    //     return $this->workers;
-    // }
+    /**
+     * Get the value of name
+     */ 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
 
-    // public function addWorker(Worker $worker): self
-    // {
-    //     if (!$this->workers->contains($worker)) {
-    //         $this->workers[] = $worker;
-    //         $worker->addProject($this);
-    //     }
+    /**
+     * Set the value of name
+     *
+     * @return  self
+     */ 
+    public function setName(string $name)
+    {
+        $this->name = $name;
 
-    //     return $this;
-    // }
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkTime[]
+     */ 
+    public function getWorktimes(): Collection
+    {
+        return $this->worktimes;
+    }
+
+    /**
+     * Set the value of worktimes
+     *
+     * @return  self
+     */ 
+    public function addWorktime(WorkTime $worktimes): self
+    {
+        if (!$this->worktimes->contains($worktimes)) {
+            $this->worktimes[] = $worktimes;
+            $worktimes->setProject($this);
+        }
+
+        return $this;
+    }
 }

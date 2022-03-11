@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=WorkerRepository::class)\
- * @ORM\Table(name="app_workers")
+ * @ORM\Table(name="app_worker")
  */
 class Worker{
 
@@ -21,9 +22,15 @@ class Worker{
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Veuillez renseigner le nom complet.")
+     * @Assert\NotBlank(message="Veuillez renseigner le prénom.")
      */
-    private $name;
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le nom.")
+     */
+    private $lastName;
 
 
     /**
@@ -33,21 +40,29 @@ class Worker{
      */
     private $email;
 
-    // /**
-    //  * to determine
-    //  */
-    // private $job;
-
-    // /**
-    //  * To determine
-    //  */
-    // private $projects;
+    /**
+     * @ORM\ManyToOne(targetEntity=Job::class, inversedBy="workers")
+     * @ORM\JoinColumn(nullable=false, name="app_job_id")
+     * @Assert\NotBlank(message="Veuillez choisir un métier.")
+     */
+    private $job;
 
     /**
      * @ORM\Column(type="float", length=255)
      * @Assert\NotBlank(message="Veuillez renseigner le coût journalier.")
      */
     private $dailycost;
+
+    /**
+     * @ORM\OneToMany(targetEntity=WorkTime::class, mappedBy="worker", orphanRemoval=true)
+     */
+    private $worktimes;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="Veuillez renseigner la date d'embauche.")
+     */
+    private $employedAt;
 
     /**
      * @ORM\Column(type="datetime")
@@ -58,6 +73,7 @@ class Worker{
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->worktimes = new ArrayCollection();
     }
 
 
@@ -84,9 +100,9 @@ class Worker{
     /**
      * Get the value of name
      */ 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
     /**
@@ -94,9 +110,29 @@ class Worker{
      *
      * @return  self
      */ 
-    public function setName(string $name)
+    public function setFirstName(string $firstName)
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of lastName
+     */ 
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set the value of lastName
+     *
+     * @return  self
+     */ 
+    public function setLastName(string $lastName)
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -121,25 +157,25 @@ class Worker{
         return $this;
     }
 
-    // /**
-    //  * Get the value of job
-    //  */ 
-    // public function getJob() : ?Job
-    // {
-    //     return $this->job;
-    // }
+    /**
+     * Get the value of job
+     */ 
+    public function getJob() : ?Job
+    {
+        return $this->job;
+    }
 
-    // /**
-    //  * Set the value of job
-    //  *
-    //  * @return  self
-    //  */ 
-    // public function setJob(?Job $job)
-    // {
-    //     $this->job = $job;
+    /**
+     * Set the value of job
+     *
+     * @return  self
+     */ 
+    public function setJob(?Job $job)
+    {
+        $this->job = $job;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * Get the value of createdAt
@@ -161,24 +197,6 @@ class Worker{
         return $this;
     }
 
-    // /**
-    //  * @return Collection|Project[]
-    //  */ 
-    // public function getProjects(): Collection
-    // {
-    //     return $this->projects;
-    // }
-
-    // public function addProject(Project $project): self
-    // {
-    //     if (!$this->projects->contains($project)) {
-    //         $this->projects[] = $project;
-    //         $project->addWorker($this);
-    //     }
-
-    //     return $this;
-    // }
-
     /**
      * Get the value of dailycost
      */ 
@@ -196,6 +214,45 @@ class Worker{
     {
         $this->dailycost = $dailycost;
 
+        return $this;
+    }
+
+    
+
+    /**
+     * Get the value of employedAt
+     */ 
+    public function getEmployedAt(): ?\DateTimeInterface
+    {
+        return $this->employedAt;
+    }
+
+    /**
+     * Set the value of employedAt
+     *
+     * @return  self
+     */ 
+    public function setEmployedAt(\DateTimeInterface $employedAt):self
+    {
+        $this->employedAt = $employedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkTime[]
+     */ 
+    public function getWorktimes(): Collection
+    {
+        return $this->worktimes;
+    }
+
+    public function addWorktime(WorkTime $worktimes)
+    {
+        if (!$this->worktimes->contains($worktimes)) {
+            $this->worktimes[] = $worktimes;
+            $worktimes->setWorker($this);
+        }
         return $this;
     }
 }

@@ -2,18 +2,55 @@
 
 namespace App\Controller;
 
+use App\Entity\Job;
+use App\Form\JobType;
+use App\Repository\JobRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class JobController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $em,
+        private JobRepository $jobRepository
+        )
+    {
+        $this->em = $em;
+        $this->jobRepository = $jobRepository;
+    }
     #[Route('/jobs', name: 'list_jobs')]
     public function listWorkers(): Response
     {
+        $jobs = $this->jobRepository->findAll();
         return $this->render('Jobs/list.html.twig', [
             'controller_name' => 'JobController',
-            'current_route' => 'list_jobs'
+            'current_route' => 'list_jobs',
+            'jobs' => $jobs
         ]);
     }
+
+    #[Route('/jobs/new', name: 'new_jobs')]
+    public function newJob(Request $request): Response
+    {
+        $job = new Job();
+        $form = $this->createForm(JobType::class, $job);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($job);
+            $this->em->flush();
+            return $this->redirectToRoute('list_jobs');
+        }
+
+        return $this->render('Jobs/form.html.twig', [
+            'controller_name' => 'JobController',
+            'current_route' => 'new_jobs',
+            'form' => $form->createView()
+        ]);
+    }
+
+
 }
