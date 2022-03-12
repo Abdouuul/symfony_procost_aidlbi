@@ -140,7 +140,7 @@
                             <a href="{{ path('worker_show', { 'id': worktime.worker.id }) }}">
                             {{ worktime.worker.firstName ~ ' ' ~ worktime.worker.lastName }}
                             </a> a travaillé sur <a href="{{ path('project_show', { 'id': worktime.project.id }) }}">{{ worktime.project.name }}</a>
-                            <div class="text-muted font-italic text-right">{{ worktime.days }}</div>
+                            <div class="text-muted font-italic text-right">{{ worktime.days ~ ' jours'}}</div>
                         </li>
                     {% endfor %}
                 </ul>

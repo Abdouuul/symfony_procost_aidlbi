@@ -55,7 +55,7 @@ class WorkerRepository extends ServiceEntityRepository
         $qb = $this
             ->createQueryBuilder('w')
             ->select('w')
-            ->leftJoin('w.worktimes', 'wt')
+            ->innerJoin('w.worktimes', 'wt')
             ->orderBy('SUM(wt.cost)', 'DESC')
             ->setMaxResults(1);
         return $qb->getQuery()->getOneOrNullResult();

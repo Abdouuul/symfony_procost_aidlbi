@@ -83,6 +83,37 @@ class ProjectRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult() ;
     }
 
+    public function findOngoingProjects(): ?array
+    {
+        $qb = $this
+            ->createQueryBuilder('p')
+            ->andWhere('p.deliveryDate is NOT NULL ');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findTotalCostOfOneProject(int $id): ?float
+    {
+        $qb = $this
+            ->createQueryBuilder('p')
+            ->innerJoin('p.worktimes', 'wt')
+            ->Select('SUM(wt.cost)')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findCountWorkerOfOneProject(int $id): ?int
+    {
+        $qb = $this
+            ->createQueryBuilder('p')
+            ->leftJoin('p.worktimes', 'wt')
+            ->Select('COUNT( DISTINCT wt.worker)')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
 
     public function addWorktimes(QueryBuilder $qb)
     {

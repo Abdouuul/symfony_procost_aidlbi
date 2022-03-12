@@ -154,7 +154,7 @@ class Project
      *
      * @return  self
      */ 
-    public function setDeliveryDate(\DateTimeInterface $deliveryDate): self
+    public function setDeliveryDate(?\DateTimeInterface $deliveryDate): self
     {
         $this->deliveryDate = $deliveryDate;
 

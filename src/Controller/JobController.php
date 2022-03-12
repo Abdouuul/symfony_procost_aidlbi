@@ -83,5 +83,16 @@ class JobController extends AbstractController
         ]);
     }
 
+    #[Route('/jobs/delete/{id}', name: 'delete_job')]
+    public function deleteJob(int $id): Response
+    {
+        $job = $this->jobRepository->findOneWithDetails($id);
+        if($job->getWorkers()->count() === 0) {
+            $this->em->remove($job);
+            $this->em->flush();
+        }
+        return $this->redirectToRoute('list_jobs');
+    }
+
 
 }

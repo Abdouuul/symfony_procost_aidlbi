@@ -82,7 +82,7 @@ class WorkerController extends AbstractController
 
         return $this->render('Workers/form.html.twig', [
             'controller_name' => 'WorkerController',
-            'current_route' => 'worker_new',
+            'current_route' => 'worker_edit',
             'form' => $form->createView()
 
         ]);

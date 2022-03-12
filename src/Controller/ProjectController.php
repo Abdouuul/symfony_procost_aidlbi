@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 
 class ProjectController extends AbstractController
 {
@@ -60,11 +61,16 @@ class ProjectController extends AbstractController
     public function showProject(int $id): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
-        
+        $projectTotalCost = $this->projectRepository->findTotalCostOfOneProject($id);
+        $projectWorkersCount = $this->projectRepository->findCountWorkerOfOneProject($id);
+
         return $this->render('Projects/detail.html.twig', [
             'controller_name' => 'ProjectController',
             'current_route' => 'project_show',
-            'project' => $project
+            'project' => $project,
+            'projectTotalCost' => $projectTotalCost,
+            'projectWorkersCount' => $projectWorkersCount
+
         ]);
     }
 
@@ -83,8 +89,32 @@ class ProjectController extends AbstractController
         
         return $this->render('Projects/form.html.twig', [
             'controller_name' => 'ProjectController',
-            'current_route' => 'project_new',
+            'current_route' => 'project_edit',
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/projects/deliver/{id}', name: 'project_delivered')]
+    public function deliverProject(int $id): Response
+    {
+        $project = $this->projectRepository->findOneWithDetails($id);
+        $project->setDeliveryDate(null);
+        $this->em->flush();
+
+        return $this->redirectToRoute('list_projects');
+    }
+
+    #[Route('/projects/delete/{id}', name: 'project_delete')]
+    public function deleteProject(int $id): Response
+    {
+        $project = $this->projectRepository->findOneWithDetails($id);
+
+        if($project->getDeliveryDate() != null) {
+            $this->em->remove($project);
+            $this->em->flush();
+        }
+        
+
+        return $this->redirectToRoute('list_projects');
     }
 }

@@ -27,7 +27,7 @@ class WorkTimeType extends AbstractType
         $builder
             ->add('project', ChoiceType::class, [
                 'label' => 'Projet concenré',
-                'choices' => $this->projectRepository->findAll(),
+                'choices' => $this->projectRepository->findOngoingProjects(),
                 'choice_label' => 'name',
             ])
             ->add('days', IntegerType::class, [
