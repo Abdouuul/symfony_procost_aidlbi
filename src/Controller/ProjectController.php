@@ -54,4 +54,17 @@ class ProjectController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+
+    #[Route('/projects/view/{id}', name: 'project_show')]
+    public function showProject(int $id): Response
+    {
+        $project = $this->projectRepository->findOneWithDetails($id);
+        
+        return $this->render('Projects/detail.html.twig', [
+            'controller_name' => 'ProjectController',
+            'current_route' => 'project_show',
+            'project' => $project
+        ]);
+    }
 }

@@ -13,6 +13,7 @@ class AppFixtures extends Fixture
         ['SEO Manager'],
         ['Web Developer'],
         ['Data Analyist'],
+        ['Développeur Symfony']
     ];
 
     /** @var ObjectManager */
@@ -28,7 +29,7 @@ class AppFixtures extends Fixture
 
     private function loadWorkers(): void
     {
-
+        
     }
 
     private function loadProjects(): void
@@ -38,13 +39,11 @@ class AppFixtures extends Fixture
 
     private function loadJobs(): void
     {
-        
         foreach (self::DATA_JOBS as $key => [$jobname]) {
             $job = new Job();
             $job->setName($jobname);
             $this->manager->persist($job);
             $this->addReference(Job::class . $key, $job);
-
         }
     }
 

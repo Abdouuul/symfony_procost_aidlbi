@@ -36,10 +36,18 @@ class WorkerRepository extends ServiceEntityRepository
                     ->andWhere('w.id = :id')
                     ->setParameter('id', $id);
         $this->addJoinJob($qb);
-        
+        $this->addWorktimes($qb);
         return $qb
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findCountOfWorkers(): ?int 
+    {
+        $qb = $this
+            ->createQueryBuilder('w')
+            ->select('COUNT(w)');
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
 
@@ -51,8 +59,11 @@ class WorkerRepository extends ServiceEntityRepository
         ;
     }
 
-    public function addWorkertimes(QueryBuilder $qb)
+    public function addWorktimes(QueryBuilder $qb)
     {
-        
+        $qb
+            ->addSelect('wt')
+            ->leftJoin('w.worktimes', 'wt')
+        ;
     }
 }

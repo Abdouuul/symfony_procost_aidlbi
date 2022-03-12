@@ -14,7 +14,7 @@
                         <i class="icon fa fa-spinner fa-3x" aria-hidden="true"></i>
                         <div class="info">
                             <p class="text-muted text-sm text-uppercase">Projets en cours</p>
-                            <p><strong>11</strong></p>
+                            <p><strong>{{ onGoingProjects }}</strong></p>
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                         <i class="icon fa fa-check-square-o fa-3x" aria-hidden="true"></i>
                         <div class="info">
                             <p class="text-muted text-sm text-uppercase">Projets livrés</p>
-                            <p><strong>76</strong></p>
+                            <p><strong>{{ deliveredProjects }}</strong></p>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <i class="icon fa fa-users fa-3x"></i>
                         <div class="info">
                             <p class="text-muted text-sm text-uppercase">Employés</p>
-                            <p><strong>34</strong></p>
+                            <p><strong>{{workersCount}}</strong></p>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         <i class="icon fa fa-calendar-check-o fa-3x" aria-hidden="true"></i>
                         <div class="info">
                             <p class="text-muted text-sm text-uppercase">Jours de production</p>
-                            <p><strong>267</strong></p>
+                            <p><strong>{{workTimesCount}}</strong></p>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="card-header text-center">Taux de livraison</div>
                         <div class="card-body">
                             <p class="text-muted">
-                                <i class="fa fa fa-check-square-o mr-2 text-primary"></i> 35% Livrés
+                                <i class="fa fa fa-check-square-o mr-2 text-primary" ></i> {{ deliveredProjectsPercentage }}% Livrés
                             </p>
                             <div class="embed-responsive embed-responsive-16by9">
                                 <canvas id="delivered-chart" class="embed-responsive-item"></canvas>
@@ -111,61 +111,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>
-                                <a href="#">Mon projet</a>
-                            </th>
-                            <th>18/03/2018</th>
-                            <th>20 000 €</th>
-                            <th>3 200 €</th>
-                            <th>
-                                <span class="badge badge-success">OUI</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <a href="#">Mon projet</a>
-                            </th>
-                            <th>18/03/2018</th>
-                            <th>20 000 €</th>
-                            <th>3 200 €</th>
-                            <th>
-                                <span class="badge badge-success">OUI</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <a href="#">Mon projet</a>
-                            </th>
-                            <th>18/03/2018</th>
-                            <th>20 000 €</th>
-                            <th>3 200 €</th>
-                            <th>
-                                <span class="badge badge-success">OUI</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <a href="#">Mon projet</a>
-                            </th>
-                            <th>18/03/2018</th>
-                            <th>20 000 €</th>
-                            <th>3 200 €</th>
-                            <th>
-                                <span class="badge badge-success">OUI</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <a href="#">Mon projet</a>
-                            </th>
-                            <th>18/03/2018</th>
-                            <th>20 000 €</th>
-                            <th>3 200 €</th>
-                            <th>
-                                <span class="badge badge-danger">NON</span>
-                            </th>
-                        </tr>
+                        {% for project in latestCreatedProjects %}
+
+                            <tr>
+                                <th>
+                                    <a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a>
+                                </th>
+                                <th>{{ project.createdAt|date("d/m/y") }}</th>
+                                <th>{{ project.price ~ ' €'}}</th>
+                                <th>Total cost</th>
+                                <th>
+                                    {{ project.deliveryDate is null ? '<span class="badge badge-success">OUI</span>' : '<span class="badge badge-danger">NON</span>' }}
+                                </th>
+                            </tr>
+                            
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -174,30 +134,15 @@
             <div class="tile">
                 <h2 class="tile-title text-center">Temps de production</h2>
                 <ul class="list-group">
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#">James Brown</a> a travaillé sur <a href="#">Projet 1</a>
-                        <div class="text-muted font-italic text-right">4 jours</div>
-                    </li>
+
+                    {% for worktime in latestWorkTimes %}
+                        <li class="list-group-item">
+                            <a href="{{ path('worker_show', { 'id': worktime.worker.id }) }}">
+                            {{ worktime.worker.firstName ~ ' ' ~ worktime.worker.lastName }}
+                            </a> a travaillé sur <a href="{{ path('project_show', { 'id': worktime.project.id }) }}">{{ worktime.project.name }}</a>
+                            <div class="text-muted font-italic text-right">{{ worktime.days }}</div>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -208,7 +153,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js" integrity="sha256-oSgtFCCmHWRPQ/JmR4OoZ3Xke1Pw4v50uh6pLcu+fIc=" crossorigin="anonymous"></script>
     <script>
         var ratioData = [70, 30];
-        var deliveredData = [35, 65];
+        var deliveredData = [{{deliveredProjects}} , {{projectsCount}} - {{deliveredProjects}}];
+        
     </script>
     <script src="{{ asset('js/dashboard.js')}}"></script>
     

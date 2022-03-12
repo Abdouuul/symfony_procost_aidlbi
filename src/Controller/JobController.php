@@ -24,7 +24,7 @@ class JobController extends AbstractController
     #[Route('/jobs', name: 'list_jobs')]
     public function listWorkers(): Response
     {
-        $jobs = $this->jobRepository->findAll();
+        $jobs = $this->jobRepository->findAllWithDetails();
         return $this->render('Jobs/list.html.twig', [
             'controller_name' => 'JobController',
             'current_route' => 'list_jobs',
@@ -49,6 +49,17 @@ class JobController extends AbstractController
             'controller_name' => 'JobController',
             'current_route' => 'new_jobs',
             'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/jobs/view/{id}', name: 'show_job')]
+    public function showJob(int $id): Response
+    {
+        $job = $this->jobRepository->findOneWithDetails($id);
+        return $this->render('Jobs/detail.html.twig', [
+            'controller_name' => 'JobController',
+            'current_route' => 'show_job',
+            'job' => $job
         ]);
     }
 

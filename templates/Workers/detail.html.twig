@@ -89,12 +89,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% for time in worker.worktimes %}
                             <tr>
-                                <td>Nom du projet</td>
-                                <td>4 jours</td>
-                                <td>23-04-2018</td>
-                                <td>1 400 €</td>
+                                <td>{{ time.project.name }}</td>
+                                <td>{{ time.days ~ ' jours' }}</td>
+                                <td>{{ time.createdAt|date("d-m-y") }}</td>
+                                <td>{{ time.cost ~ ' €' }}</td>
                             </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
