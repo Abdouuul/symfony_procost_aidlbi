@@ -54,7 +54,7 @@
             </div>
             <div class="tile">
                 <h3 class="title-title mb-4">Ajouter un temps</h3>
-                <form class="form-horizontal">
+                {{ form_start(form) }}
                     <div class="form-group row">
                         {{ form_errors(form.project) }}
                         {{ form_label(form.project) }}
@@ -72,7 +72,7 @@
                             <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>Enregistrer</a>
                         </div>
                     </div>
-                </form>
+                {{ form_end(form) }}
             </div>
         </div>
         <div class="col-md-8">

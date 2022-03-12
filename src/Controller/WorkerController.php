@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Worker;
 use App\Entity\WorkTime;
 use App\Form\WorkerType;
+use App\Form\WorkTimeType;
 use App\Repository\WorkerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,25 +42,26 @@ class WorkerController extends AbstractController
     {
         $worker = $this->workerRepository->findOneWithDetails($id);
 
-        $WorkTime = new WorkTime();
-        $form = $this->createForm(WorkTime::class, $WorkTime);
+        $worktime = new WorkTime();
+        $form = $this->createForm(WorkTimeType::class, $worktime);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $WorkTime->setWorker($worker);
+            $worktime->setWorker($worker);
 
-            $cost = (float) $worker->getDailycost() * $WorkTime->getDays();
-            $WorkTime->setCost($cost);
+            $cost = (float) $worker->getDailycost() * $worktime->getDays();
+            $worktime->setCost($cost);
 
-            $this->em->persist($WorkTime);
+            $this->em->persist($worktime);
             $this->em->flush();
         }
 
 
-        return $this->render('Workers/show.html.twig', [
+        return $this->render('Workers/detail.html.twig', [
             'controller_name' => 'WorkerController',
             'current_route' => 'worker_show',
-            'worker' => $worker
+            'worker' => $worker,
+            'form' => $form->createView()
         ]);
     }
 
