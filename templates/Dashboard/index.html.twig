@@ -80,13 +80,13 @@
                             <div class="text-center">
                                 <img src="img/ui-zac.jpg" class="rounded-circle" width="58">
                                 <p class="mt-2">
-                                    <strong>Zac Producteur</strong>
+                                    <strong>{{topWorker.firstName ~ ' ' ~ topWorker.lastName }}</strong>
                                 </p>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <p class="small mt">EMPLOYÉ DEPUIS</p>
-                                    <p>Février 2012</p>
+                                    <p>{{topWorker.employedAt|date("F Y")}}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <p class="small mt">COÛT TOTAL</p>

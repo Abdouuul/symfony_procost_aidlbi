@@ -52,6 +52,26 @@ class JobController extends AbstractController
         ]);
     }
 
+    #[Route('/jobs/edit/{id}', name: 'jobs_edit')]
+    public function editJob(int $id, Request $request): Response
+    {
+        $job = $this->jobRepository->find($id);
+        $form = $this->createForm(JobType::class, $job);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+
+            return $this->redirectToRoute('list_jobs');
+        }
+
+        return $this->render('Jobs/form.html.twig', [
+            'controller_name' => 'JobController',
+            'current_route' => 'jobs_edit',
+            'form' => $form->createView()
+        ]);
+    }
+
     #[Route('/jobs/view/{id}', name: 'show_job')]
     public function showJob(int $id): Response
     {

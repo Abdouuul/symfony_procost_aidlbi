@@ -40,6 +40,8 @@ class MainController extends AbstractController
 
         $workersCount = $this->workerRepository->findCountOfWorkers();
 
+        $topWorker = $this->workerRepository->findTopWorker();
+
 
 
         $deliveredProjectsPercentage = $deliveredProjects / $projectsCount * 100 ;
@@ -55,7 +57,7 @@ class MainController extends AbstractController
             'deliveredProjectsPercentage' => (int) $deliveredProjectsPercentage,
             'workTimesCount' => $workTimesCount,
             'workersCount' => $workersCount,
-            
+            'topWorker' => $topWorker,
         ]);
     }
         

@@ -54,6 +54,8 @@ class WorkerController extends AbstractController
 
             $this->em->persist($worktime);
             $this->em->flush();
+
+            return $this->redirectToRoute('worker_show', ['id' => $worker->getId()]);
         }
 
 
@@ -65,6 +67,28 @@ class WorkerController extends AbstractController
         ]);
     }
 
+    #[Route('/workers/edit/{id}', name: 'worker_edit')]
+    public function editWorker(int $id, Request $request): Response
+    {
+        $worker = $this->workerRepository->findOneWithDetails($id);
+        $form = $this->createForm(WorkerType::class, $worker);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($worker);
+            $this->em->flush();
+
+        }
+
+        return $this->render('Workers/form.html.twig', [
+            'controller_name' => 'WorkerController',
+            'current_route' => 'worker_new',
+            'form' => $form->createView()
+
+        ]);
+
+    }
+
     #[Route('/workers/new', name: 'worker_new')]
     public function newWorker(Request $request): Response
     {
@@ -73,7 +97,6 @@ class WorkerController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($worker);
             $this->em->flush();
 
             return $this->redirectToRoute('list_workers');
