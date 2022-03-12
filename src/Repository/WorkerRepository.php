@@ -36,6 +36,7 @@ class WorkerRepository extends ServiceEntityRepository
                     ->andWhere('w.id = :id')
                     ->setParameter('id', $id);
         $this->addJoinJob($qb);
+        
         return $qb
             ->getQuery()
             ->getOneOrNullResult();
@@ -48,5 +49,10 @@ class WorkerRepository extends ServiceEntityRepository
             ->addSelect('j')
             ->innerJoin('w.job', 'j')
         ;
+    }
+
+    public function addWorkertimes(QueryBuilder $qb)
+    {
+        
     }
 }

@@ -43,6 +43,16 @@ class WorkTime
     private $days;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
      * Get the value of id
      */ 
     public function getId(): ?int
@@ -138,6 +148,26 @@ class WorkTime
     public function setDays(int $days)
     {
         $this->days = $days;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of createdAt
+     */ 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set the value of createdAt
+     *
+     * @return  self
+     */ 
+    public function setCreatedAt(\DateTimeInterface $createdAt)
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
