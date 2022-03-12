@@ -56,9 +56,24 @@ class WorkerRepository extends ServiceEntityRepository
             ->createQueryBuilder('w')
             ->select('w')
             ->innerJoin('w.worktimes', 'wt')
+            ->groupBy('w.id')
             ->orderBy('SUM(wt.cost)', 'DESC')
             ->setMaxResults(1);
+        ;
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findTopWorkerMaxCost(int $id): ?float
+    {
+        $qb = $this
+            ->createQueryBuilder('w')
+            ->select('SUM(wt.cost)')
+            ->innerJoin('w.worktimes', 'wt')
+            ->andWhere('w.id = :id')
+            ->setParameter('id', $id)
+            ->groupBy('w.id');
+        ;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
 
