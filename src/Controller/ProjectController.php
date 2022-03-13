@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Form\ProjectType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,17 @@ class ProjectController extends AbstractController
         $this->em = $em;
         $this->projectRepository = $projectRepository;
     }
+    
     #[Route('/projects', name: 'list_projects')]
-    public function listProjects(): Response
+    public function listProjects(Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $projects = $this->projectRepository->findAll();
+
+        $projects = $paginatorInterface->paginate(
+            $projects, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return $this->render('Projects/list.html.twig', [
             'controller_name' => 'ProjectController',
@@ -58,9 +66,15 @@ class ProjectController extends AbstractController
 
 
     #[Route('/projects/view/{id}', name: 'project_show')]
-    public function showProject(int $id): Response
+    public function showProject(int $id, Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
+        $worktimes = $project->getWorktimes();
+        $worktimes = $paginatorInterface->paginate(
+            $worktimes, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
         $projectTotalCost = $this->projectRepository->findTotalCostOfOneProject($id);
         $projectWorkersCount = $this->projectRepository->findCountWorkerOfOneProject($id);
 
@@ -68,6 +82,7 @@ class ProjectController extends AbstractController
             'controller_name' => 'ProjectController',
             'current_route' => 'project_show',
             'project' => $project,
+            'worktimes' => $worktimes,
             'projectTotalCost' => $projectTotalCost,
             'projectWorkersCount' => $projectWorkersCount
 

@@ -8,6 +8,7 @@ use App\Form\WorkerType;
 use App\Form\WorkTimeType;
 use App\Repository\WorkerRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +27,15 @@ class WorkerController extends AbstractController
     }
 
     #[Route('/workers', name: 'list_workers')]
-    public function listWorkers(): Response
+    public function listWorkers(Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $workers = $this->workerRepository->findAllWithDetails();
+
+        $workers = $paginatorInterface->paginate(
+            $workers, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return $this->render('Workers/list.html.twig', [
             'controller_name' => 'WorkerController',
@@ -38,13 +45,21 @@ class WorkerController extends AbstractController
     }
 
     #[Route('/workers/view/{id}', name: 'worker_show')]
-    public function showWorker(int $id, Request $request): Response
+    public function showWorker(int $id, Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $worker = $this->workerRepository->findOneWithDetails($id);
+
+        $thisWorkerTime = $worker->getWorktimes();
 
         $worktime = new WorkTime();
         $form = $this->createForm(WorkTimeType::class, $worktime);
         $form->handleRequest($request);
+
+        $thisWorkerTime = $paginatorInterface->paginate(
+            $thisWorkerTime, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         if($form->isSubmitted() && $form->isValid()) {
             $worktime->setWorker($worker);
@@ -63,6 +78,7 @@ class WorkerController extends AbstractController
             'controller_name' => 'WorkerController',
             'current_route' => 'worker_show',
             'worker' => $worker,
+            'worktimes' => $thisWorkerTime,
             'form' => $form->createView()
         ]);
     }
