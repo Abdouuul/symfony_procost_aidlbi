@@ -32,7 +32,7 @@ class JobRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneWithDetails(int $id): Job
+    public function findOneWithDetails(int $id): ?Job
     {
         $qb = $this->createQueryBuilder('j');
         $this->addJoinWorkers($qb);

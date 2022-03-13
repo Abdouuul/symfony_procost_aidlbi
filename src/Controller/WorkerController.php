@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class WorkerController extends AbstractController
@@ -48,6 +49,9 @@ class WorkerController extends AbstractController
     public function showWorker(int $id, Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $worker = $this->workerRepository->findOneWithDetails($id);
+        if ($worker === null) {
+            throw new NotFoundHttpException();
+        }
 
         $thisWorkerTime = $worker->getWorktimes();
 
@@ -87,6 +91,10 @@ class WorkerController extends AbstractController
     public function editWorker(int $id, Request $request): Response
     {
         $worker = $this->workerRepository->findOneWithDetails($id);
+        if ($worker === null) {
+            throw new NotFoundHttpException();
+        }
+
         $form = $this->createForm(WorkerType::class, $worker);
         $form->handleRequest($request);
 

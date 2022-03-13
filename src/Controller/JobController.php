@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class JobController extends AbstractController
@@ -56,6 +57,10 @@ class JobController extends AbstractController
     public function editJob(int $id, Request $request): Response
     {
         $job = $this->jobRepository->find($id);
+        if ($job === null) {
+            throw new NotFoundHttpException();
+        }
+
         $form = $this->createForm(JobType::class, $job);
         $form->handleRequest($request);
 
@@ -76,6 +81,10 @@ class JobController extends AbstractController
     public function showJob(int $id): Response
     {
         $job = $this->jobRepository->findOneWithDetails($id);
+
+        if ($job === null) {
+            throw new NotFoundHttpException();
+        }
         return $this->render('Jobs/detail.html.twig', [
             'controller_name' => 'JobController',
             'current_route' => 'show_job',
@@ -87,6 +96,9 @@ class JobController extends AbstractController
     public function deleteJob(int $id): Response
     {
         $job = $this->jobRepository->findOneWithDetails($id);
+        if ($job === null || count($job->getWorkers()) > 0 ) {
+            throw new NotFoundHttpException();
+        }
         if($job->getWorkers()->count() === 0) {
             $this->em->remove($job);
             $this->em->flush();

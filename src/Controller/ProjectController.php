@@ -10,6 +10,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 
@@ -69,6 +70,11 @@ class ProjectController extends AbstractController
     public function showProject(int $id, Request $request, PaginatorInterface $paginatorInterface): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
+
+        if ($project === null) {
+            throw new NotFoundHttpException();
+        }
+
         $worktimes = $project->getWorktimes();
         $worktimes = $paginatorInterface->paginate(
             $worktimes, /* query NOT result */
@@ -93,6 +99,10 @@ class ProjectController extends AbstractController
     public function editProject(int $id, Request $request): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
+        if ($project === null || $project->getDeliveryDate() === null) {
+            throw new NotFoundHttpException();
+        }
+
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
@@ -113,6 +123,9 @@ class ProjectController extends AbstractController
     public function deliverProject(int $id): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
+        if ($project === null || $project->getDeliveryDate() === null) {
+            throw new NotFoundHttpException();
+        }
         $project->setDeliveryDate(null);
         $this->em->flush();
 
@@ -123,7 +136,10 @@ class ProjectController extends AbstractController
     public function deleteProject(int $id): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
-
+        if ($project === null || $project->getDeliveryDate() === null) {
+            throw new NotFoundHttpException();
+        }
+        
         if($project->getDeliveryDate() != null) {
             $this->em->remove($project);
             $this->em->flush();
