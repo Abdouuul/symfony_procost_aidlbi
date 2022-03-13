@@ -34,7 +34,7 @@ class Project
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="float", length=255)
      * @Assert\NotBlank(message="Veuillez renseigner le prix du projet.")
      */
     private $price;
@@ -104,7 +104,7 @@ class Project
     /**
      * Get the value of price
      */ 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -114,7 +114,7 @@ class Project
      *
      * @return  self
      */ 
-    public function setPrice(?string $price)
+    public function setPrice(float $price)
     {
         $this->price = $price;
 

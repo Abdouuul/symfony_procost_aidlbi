@@ -14,6 +14,6 @@
 
 ## Notes sur les fixtures
 
-Rien à signaler
+Les temps de travails ne sont pas ajoutés dans les fixtures
 
 # #

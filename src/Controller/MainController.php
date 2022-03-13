@@ -42,9 +42,19 @@ class MainController extends AbstractController
 
         $topWorker = $this->workerRepository->findTopWorker();
 
-        $topWorkerCost = $this->workerRepository->findTopWorkerMaxCost($topWorker->getId());
+        if($topWorker){
+            $topWorkerCost = $this->workerRepository->findTopWorkerMaxCost($topWorker->getId());
+        }else{
+            $topWorkerCost = 0;
+        }
 
-        $deliveredProjectsPercentage = $deliveredProjects / $projectsCount * 100 ;
+        if($deliveredProjects != 0 && $projectsCount != 0)
+        {
+            $deliveredProjectsPercentage = $deliveredProjects / $projectsCount * 100;
+        }else{
+            $deliveredProjectsPercentage = 0;
+        }
+        
         
 
         return $this->render('Dashboard/index.html.twig', [

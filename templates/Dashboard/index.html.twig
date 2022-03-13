@@ -73,29 +73,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header text-center text-uppercase">Top employé</div>
-                        <div class="card-body">
-                            <div class="text-center">
-                                <img src="img/ui-zac.jpg" class="rounded-circle" width="58">
-                                <p class="mt-2">
-                                    <strong>{{topWorker.firstName ~ ' ' ~ topWorker.lastName }}</strong>
-                                </p>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="small mt">EMPLOYÉ DEPUIS</p>
-                                    <p>{{topWorker.employedAt|date("F Y")}}</p>
+                {% if topWorker %}
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header text-center text-uppercase">Top employé</div>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <img src="img/ui-zac.jpg" class="rounded-circle" width="58">
+                                    <p class="mt-2">
+                                        <strong>{{topWorker.firstName ~ ' ' ~ topWorker.lastName }}</strong>
+                                    </p>
                                 </div>
-                                <div class="col-md-6">
-                                    <p class="small mt">COÛT TOTAL</p>
-                                    <p>{{topWorkerCost ~ ' €'}}</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="small mt">EMPLOYÉ DEPUIS</p>
+                                        <p>{{topWorker.employedAt|date("F Y")}}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="small mt">COÛT TOTAL</p>
+                                        <p>{{topWorkerCost ~ ' €'}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                
+                {% endif %}
+                
+                
             </div>
             <hr>
             <div class="tile table-responsive">

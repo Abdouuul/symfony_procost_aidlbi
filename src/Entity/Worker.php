@@ -212,7 +212,7 @@ class Worker
      *
      * @return  self
      */ 
-    public function setDailycost(?float $dailycost)
+    public function setDailycost(float $dailycost)
     {
         $this->dailycost = $dailycost;
 
