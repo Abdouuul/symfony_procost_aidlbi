@@ -127,7 +127,7 @@
                                 <th>{{ project.price ~ ' €'}}</th>
                                 <th>Total cost</th>
                                 <th>
-                                    {{ project.deliveryDate is null ? '<span class="badge badge-success">OUI</span>' : '<span class="badge badge-danger">NON</span>' }}
+                                    {{ project.deliveryDate is not null ? '<span class="badge badge-success">OUI</span>' : '<span class="badge badge-danger">NON</span>' }}
                                 </th>
                             </tr>
                             

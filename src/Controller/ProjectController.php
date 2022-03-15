@@ -99,7 +99,7 @@ class ProjectController extends AbstractController
     public function editProject(int $id, Request $request): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
-        if ($project === null || $project->getDeliveryDate() === null) {
+        if ($project === null || $project->getDeliveryDate() !== null) {
             throw new NotFoundHttpException();
         }
 
@@ -123,10 +123,10 @@ class ProjectController extends AbstractController
     public function deliverProject(int $id): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
-        if ($project === null || $project->getDeliveryDate() === null) {
+        if ($project === null || $project->getDeliveryDate() !== null) {
             throw new NotFoundHttpException();
         }
-        $project->setDeliveryDate(null);
+        $project->setDeliveryDate(new \DateTime());
         $this->em->flush();
 
         return $this->redirectToRoute('list_projects');
@@ -136,7 +136,7 @@ class ProjectController extends AbstractController
     public function deleteProject(int $id): Response
     {
         $project = $this->projectRepository->findOneWithDetails($id);
-        if ($project === null || $project->getDeliveryDate() === null) {
+        if ($project === null || $project->getDeliveryDate() !== null) {
             throw new NotFoundHttpException();
         }
         

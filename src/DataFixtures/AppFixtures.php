@@ -26,8 +26,7 @@ class AppFixtures extends Fixture
         ['React Dev']
     ];
     
-    private const DATA_WORKERS = [];
-    private const DATA_PROJECTS = [];
+    
 
     /** @var ObjectManager */
     private $manager;
@@ -75,8 +74,7 @@ class AppFixtures extends Fixture
             $project->setName('project-name-' . $i)
                     ->setDescription('project-description-' . $i)
                     ->setPrice(random_int(4000,12000))
-                    ->setDeliveryDate(new \DateTime())
-                    ->setCreatedAt(new \DateTime())
+                    ->setDeliveryDate(null)
             ;
             $this->addReference(Project::class . $i, $project);
             $this->manager->persist($project);

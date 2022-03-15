@@ -36,13 +36,13 @@
                         <td>{{ project.description }}</td>
                         <td>{{ project.price ~ ' €'}}</td>
                         <td>
-                            {{ project.deliveryDate is null ? '<span class="badge badge-success">OUI</span>' : '<span class="badge badge-danger">NON</span>' }}
+                            {{ project.deliveryDate is not null ? '<span class="badge badge-success">OUI</span>' : '<span class="badge badge-danger">NON</span>' }}
                         </td>
                         <td>
                             <a href="{{ path('project_show', { 'id': project.id }) }}" class="btn btn-primary btn-sm">
                                 <i class="fa fa-eye mr-0"></i>
                             </a>
-                            {% if project.deliveryDate is not null %}
+                            {% if project.deliveryDate is null %}
                                 <a href="{{ path('project_edit', { 'id': project.id }) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-pencil mr-0"></i>
                                 </a>

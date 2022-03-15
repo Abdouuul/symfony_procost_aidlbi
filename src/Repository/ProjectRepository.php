@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Repository;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Project;
@@ -17,7 +19,7 @@ class ProjectRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Project::class);
     }
-    
+
     /**
      * @return Project[]
      */
@@ -30,11 +32,11 @@ class ProjectRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneWithDetails(int $id): Project
+    public function findOneWithDetails(int $id): ?Project
     {
         $qb = $this->createQueryBuilder('p')
-                    ->andWhere('p.id = :id')
-                    ->setParameter('id', $id);
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id);
         $this->addWorktimes($qb);
         return $qb
             ->getQuery()
@@ -56,8 +58,7 @@ class ProjectRepository extends ServiceEntityRepository
         $qb = $this
             ->createQueryBuilder('p')
             ->select('COUNT(p)')
-            ->andWhere('p.deliveryDate is NOT NULL ');
-        ;
+            ->andWhere('p.deliveryDate is NULL ');;
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -66,8 +67,7 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $qb = $this
             ->createQueryBuilder('p')
-            ->select('COUNT(p)')
-            ;
+            ->select('COUNT(p)');
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -78,16 +78,16 @@ class ProjectRepository extends ServiceEntityRepository
         $qb = $this
             ->createQueryBuilder('p')
             ->select('COUNT(p)')
-            ->andWhere('p.deliveryDate is NULL ');
+            ->andWhere('p.deliveryDate is NOT NULL ');
 
-        return $qb->getQuery()->getSingleScalarResult() ;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findOngoingProjects(): ?array
     {
         $qb = $this
             ->createQueryBuilder('p')
-            ->andWhere('p.deliveryDate is NOT NULL ');
+            ->andWhere('p.deliveryDate is NULL ');
 
         return $qb->getQuery()->getResult();
     }
@@ -119,7 +119,6 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $qb
             ->addSelect('wt')
-            ->leftJoin('p.worktimes', 'wt')
-        ;
+            ->leftJoin('p.worktimes', 'wt');
     }
 }
